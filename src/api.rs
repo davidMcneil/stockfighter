@@ -135,3 +135,30 @@ pub fn stock_quote(venue: &str, stock: &str) -> StockQuote {
     StockQuote::new(venue.to_string(), stock.to_string(),
                     bid, ask, bid_size, ask_size, bid_depth, ask_depth, last, last_size)
 }
+
+#[allow(dead_code)]
+pub fn order_status(venue: &str, stock: &str, id: u64) -> OrderStatus {
+    let url = format!("{}/venues/{}/stocks/{}/orders/{}", BASE_URL, venue, stock, id);
+    let err_msg = format!("Unable to get status of order for stock {} on venue {} with id {}",
+                           stock, venue, id);
+    let mut response = CLIENT.get(&url)
+        .headers(get_headers())
+        .send()
+        .expect(&err_msg);
+    assert!(response.status == hyper::Ok, err_msg);
+    let empty: Vec<rustc_serialize::json::Json> = Vec::new();
+    let response_json = get_response_json(& mut response, &err_msg);
+    // println!("{:?}", response);
+    let id = json_to_u64(&response_json["id"], &err_msg);
+    let direction = Direction::decode(json_to_string(&response_json["direction"], &err_msg));
+    let original_qty = json_to_u64(&response_json["originalQty"], &err_msg);
+    let total_filled = json_to_u64(&response_json["totalFilled"], &err_msg);
+    let price = json_to_u64(&response_json["price"], &err_msg);
+    let fill_objs = response_json["fills"].as_array().unwrap_or(&empty);
+    let order_type = OrderType::decode(json_to_string(&response_json["orderType"], &err_msg));
+    let fills: Vec<Fill> = fill_objs.iter().map(|o|
+        Fill::new(json_to_u64(&o["price"], &err_msg),
+                  json_to_u64(&o["qty"], &err_msg))).collect();
+    OrderStatus::new(id, venue.to_string(), stock.to_string(),
+                     direction, original_qty, total_filled, price, order_type, fills)
+}

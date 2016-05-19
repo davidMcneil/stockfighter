@@ -1,5 +1,6 @@
 extern crate rustc_serialize;
 use self::rustc_serialize::{ Encodable, Encoder };
+use std::ascii::AsciiExt;
 
 #[derive(Debug)]
 pub struct Stock {
@@ -57,12 +58,36 @@ pub enum Direction {
     Sell
 }
 
+impl Direction {
+    pub fn decode(string: String) -> Direction {
+        match string.trim().to_ascii_lowercase().as_ref() {
+            "buy" => Direction::Buy,
+            "sell" => Direction::Sell,
+            _ => panic!("Unexpected Direction"),
+        }
+    }
+}
+
 #[allow(dead_code)]  #[derive(Debug, Clone, RustcEncodable)]
 pub enum OrderType {
     Limit,
     Market,
     Fok,
     Ioc
+}
+
+impl OrderType {
+    pub fn decode(string: String) -> OrderType {
+        match string.trim().to_ascii_lowercase().as_ref() {
+            "limit" => OrderType::Limit,
+            "market" => OrderType::Market,
+            "fok" => OrderType::Fok,
+            "fill-or-kill" => OrderType::Fok,
+            "ioc" => OrderType::Ioc,
+            "immediate-or-cancel" => OrderType::Ioc,
+            _ => panic!("Unexpected OrderType"),
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -139,3 +164,26 @@ impl StockQuote {
                     ask_depth: ask_depth, last: last, last_size: last_size }
     }
 }
+
+#[derive(Debug)]
+pub struct OrderStatus {
+    pub id: u64,
+    pub venue: String,
+    pub symbol: String,
+    pub direction: Direction,
+    pub original_qty: u64,
+    pub total_filled: u64,
+    pub price: u64,
+    pub order_type: OrderType,
+    pub fills: Vec<Fill>
+}
+
+impl OrderStatus {
+    pub fn new(id: u64, venue: String, symbol: String, direction: Direction, original_qty: u64,
+               total_filled: u64, price: u64, order_type: OrderType, fills: Vec<Fill>) -> OrderStatus {
+        OrderStatus{ id: id, venue: venue, symbol: symbol, direction: direction,
+                     original_qty: original_qty, total_filled: total_filled, price: price, order_type: order_type,
+                     fills: fills }
+    }
+}
+

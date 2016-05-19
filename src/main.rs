@@ -42,9 +42,11 @@ fn main() {
         println!("    {} -> {}", stock.symbol, stock.name);
     }
 
-    // println!("{:?}", order_stock(ACCOUNT, VENUE, STOCK, 10, 100*5, Buy, Limit));
+    let order_result = order_stock(ACCOUNT, VENUE, STOCK, 2, 5, Sell, Limit);
+    // println!("{:?}", order_result);
     // println!("{:?}", stock_orderbook(VENUE, STOCK));
-    println!("{:?}", stock_quote(VENUE, STOCK));
+    // println!("{:?}", stock_quote(VENUE, STOCK));
+    println!("{:?}", order_status(VENUE, STOCK, order_result.id));
 
     // std::thread::sleep(std::time::Duration::from_millis(500));
 }
