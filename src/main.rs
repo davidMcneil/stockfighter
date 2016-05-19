@@ -44,9 +44,11 @@ fn main() {
 
     let order_result = order_stock(ACCOUNT, VENUE, STOCK, 2, 5, Sell, Limit);
     // println!("{:?}", order_result);
-    // println!("{:?}", stock_orderbook(VENUE, STOCK));
+    println!("{:?}", stock_orderbook(VENUE, STOCK));
     // println!("{:?}", stock_quote(VENUE, STOCK));
     println!("{:?}", order_status(VENUE, STOCK, order_result.id));
+    println!("{:?}", cancel_order(VENUE, STOCK, order_result.id));
+    println!("{:?}", stock_orderbook(VENUE, STOCK));
 
     // std::thread::sleep(std::time::Duration::from_millis(500));
 }
