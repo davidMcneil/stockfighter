@@ -6,3 +6,4 @@ authors = ["David McNeil <mcneilde@rose-hulman.edu>"]
 [dependencies]
 hyper = "0.9.4"
 rustc-serialize = "0.3.19"
+lazy_static = "0.1.*"
