@@ -124,21 +124,24 @@ impl Encodable for StockOrder {
 }
 
 #[derive(Debug)]
-pub struct OrderResult {
+pub struct OrderStatus {
     pub id: u64,
     pub venue: String,
     pub symbol: String,
     pub direction: Direction,
     pub original_qty: u64,
     pub total_filled: u64,
+    pub price: u64,
+    pub order_type: OrderType,
     pub fills: Vec<Fill>
 }
 
-impl OrderResult {
-    pub fn new(id: u64, venue: String, symbol: String, direction: Direction,
-               original_qty: u64, total_filled: u64, fills: Vec<Fill>) -> OrderResult {
-        OrderResult{ id: id, venue: venue, symbol: symbol, direction: direction,
-                     original_qty: original_qty, total_filled: total_filled, fills: fills }
+impl OrderStatus {
+    pub fn new(id: u64, venue: String, symbol: String, direction: Direction, original_qty: u64,
+               total_filled: u64, price: u64, order_type: OrderType, fills: Vec<Fill>) -> OrderStatus {
+        OrderStatus{ id: id, venue: venue, symbol: symbol, direction: direction,
+                     original_qty: original_qty, total_filled: total_filled, price: price, order_type: order_type,
+                     fills: fills }
     }
 }
 
@@ -164,26 +167,3 @@ impl StockQuote {
                     ask_depth: ask_depth, last: last, last_size: last_size }
     }
 }
-
-#[derive(Debug)]
-pub struct OrderStatus {
-    pub id: u64,
-    pub venue: String,
-    pub symbol: String,
-    pub direction: Direction,
-    pub original_qty: u64,
-    pub total_filled: u64,
-    pub price: u64,
-    pub order_type: OrderType,
-    pub fills: Vec<Fill>
-}
-
-impl OrderStatus {
-    pub fn new(id: u64, venue: String, symbol: String, direction: Direction, original_qty: u64,
-               total_filled: u64, price: u64, order_type: OrderType, fills: Vec<Fill>) -> OrderStatus {
-        OrderStatus{ id: id, venue: venue, symbol: symbol, direction: direction,
-                     original_qty: original_qty, total_filled: total_filled, price: price, order_type: order_type,
-                     fills: fills }
-    }
-}
-

@@ -16,7 +16,7 @@ use api::*;
 #[allow(dead_code)]
 const VENUE: &'static str = "TESTEX";
 #[allow(dead_code)]
-const STOCK: &'static str = "FOOBAR";
+const SYMBOL: &'static str = "FOOBAR";
 #[allow(dead_code)]
 const ACCOUNT: &'static str = "EXB123456";
 
@@ -24,7 +24,7 @@ const ACCOUNT: &'static str = "EXB123456";
 // #[allow(dead_code)]
 // const VENUE: &'static str = "IRHEX";
 // #[allow(dead_code)]
-// const STOCK: &'static str = "IZFI";
+// const SYMBOL: &'static str = "IZFI";
 // #[allow(dead_code)]
 // const ACCOUNT: &'static str = "ELB34783810";
 
@@ -42,13 +42,16 @@ fn main() {
         println!("    {} -> {}", stock.symbol, stock.name);
     }
 
-    let order_result = order_stock(ACCOUNT, VENUE, STOCK, 2, 5, Sell, Limit);
+    let order_result = order_stock(ACCOUNT, VENUE, SYMBOL, 2, 5, Sell, Limit);
     // println!("{:?}", order_result);
-    println!("{:?}", stock_orderbook(VENUE, STOCK));
-    // println!("{:?}", stock_quote(VENUE, STOCK));
-    println!("{:?}", order_status(VENUE, STOCK, order_result.id));
-    println!("{:?}", cancel_order(VENUE, STOCK, order_result.id));
-    println!("{:?}", stock_orderbook(VENUE, STOCK));
+    println!("{:?}", stock_orderbook(VENUE, SYMBOL));
+    println!("{:?}", stock_quote(VENUE, SYMBOL));
+    println!("{:?}", order_status(VENUE, SYMBOL, order_result.id));
+    println!("{:?}", cancel_order(VENUE, SYMBOL, order_result.id));
+    println!("{:?}", stock_orderbook(VENUE, SYMBOL));
+
+    println!("{:?}", venue_order_statuses(VENUE, ACCOUNT));
+    println!("{:?}", stock_order_statuses(VENUE, ACCOUNT, SYMBOL));
 
     // std::thread::sleep(std::time::Duration::from_millis(500));
 }
