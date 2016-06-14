@@ -136,7 +136,6 @@ pub fn stock_quote(venue: &str, symbol: &str) -> StockQuote {
         .expect(&err_msg);
     assert!(response.status == hyper::Ok, err_msg);
     let response_json = get_response_json(& mut response, &err_msg);
-    println!("{:?}", response_json);
     let venue = json_to_string(&response_json["venue"], &err_msg);
     let symbol = json_to_string(&response_json["symbol"], &err_msg);
     let bid_size = json_to_u64(&response_json["bidSize"], &err_msg);
